@@ -14,6 +14,8 @@ const port = process.env.PORT || 3000;
 
 app.use(bodyParser.json());
 
+
+
 app.post('/todos', (req, res) => {
   const todo = new Todo({
     text: req.body.text
@@ -91,19 +93,43 @@ app.patch('/todos/:id', (req, res) => {
     });
 });
 
+
+//POST /users
+// app.post('/users', (req, res) => {
+//   let body = _.pick(req.body, ['email', 'password']);
+//
+//   let user = new User(body);
+//
+//   user.save().then(() => {
+//     return user.generateAuthToken();
+//   }).then((token) => {
+//     res.header('x-auth', token).send(user);
+//   }).catch((e) => {
+//     res.status(400).send(e);
+//   })
+// });
+
+app.post('/users', (req, res) => {
+  var body = _.pick(req.body, ['email', 'password']);
+  var user = new User(body);
+
+  user.save().then(() => {
+    return user.generateAuthToken();
+  }).then((token) => {
+    res.header('x-auth', token).send(user);
+  }).catch((e) => {
+    res.status(400).send(e);
+  })
+});
+
+
+
 app.listen(port, () => {
   console.log(`Started on port ${port}`);
 })
-// const newTodo = new Todo({
-//   text: 'Test SendGrid Nodejs',
-//   // completed: false,
-//   // completedAt: 21
-// });
-//
-// newTodo.save().then((doc) => {
-//   console.log('Todo saved! ', doc);
-// }, (error) => {
-//   console.log(`Unable to save. Error: ${error}`)
-// });
+
+
+
+
 
 module.exports = {app};
